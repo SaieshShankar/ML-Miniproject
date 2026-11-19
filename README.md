@@ -1,5 +1,9 @@
 # LendingClub Loan Default & Profitability Prediction
 
+**Applied ML · validation-based tuning**
+
+This repository preserves an earlier LendingClub implementation. For the version with saved results, Optuna tuning, SHAP explanations, and the demo, start with [ML-Miniproject-new](https://github.com/SaieshShankar/ML-Miniproject-new).
+
 UE24CS352A – Machine Learning · Mini-Project
 
 Credit risk is the central concern of any peer-to-peer (P2P) lending investor. This project builds
@@ -10,11 +14,10 @@ loans are worth funding*:
 |------|----------|--------|
 | **Classification** | Will this loan be *fully paid* or *default / charge off*? | Logistic Regression, Neural Network (MLP), Random Forest, Gradient Boosting, **LightGBM, CatBoost** (default + Optuna-tuned) |
 | **Regression** | What *net annualised return (NAR)* will this loan earn? | Linear, Ridge, Neural Network (MLP), Random Forest (depth 4/8/10), Gradient Boosting, **LightGBM, CatBoost** (default + tuned) |
-| **Loan-selection strategy** | Which loans should I invest in? | Invest in every loan whose predicted NAR ≥ threshold *M* (tuned on train, evaluated on test) |
+| **Loan-selection strategy** | Which loans should I invest in? | Invest in every loan whose predicted NAR ≥ threshold *M* (tuned on validation, evaluated on test) |
 
 The approach follows *Li & Han, "LendingClub Loan Default and Profitability Prediction"* (Stanford).
 
-**Team:** `<Name 1 – SRN>`, `<Name 2 – SRN>` · **Section:** `<section>` · **Problem #:** `<serial no.>`
 
 ---
 
@@ -44,7 +47,8 @@ The approach follows *Li & Han, "LendingClub Loan Default and Profitability Pred
 ## Setup
 
 ```bash
-git clone <your-repo-url> && cd <repo>
+git clone https://github.com/SaieshShankar/ML-Miniproject.git
+cd ML-Miniproject
 python -m venv .venv && source .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
 ```
@@ -133,7 +137,7 @@ entered are treated as missing and imputed exactly as during training.
 | Random Forest regressor (depth 10) | test MSE / R² | 0.036 / 0.315 |
 | Strategy (*M* = 0.132) | realised return / loans selected | ≈ 15 % / 1.76 % |
 
-Add **your own** numbers from `results/` here after running on the real dataset.
+This table contains reference-paper figures, not verified results from this repository.
 
 ## Improvements over the reference report
 
@@ -164,7 +168,7 @@ claim to beat those figures; we claim a reproducible, leakage-free, properly val
   oversampling, because the sigmoid network trained on imbalanced data collapsed to one class.
 - **Sub-sampling** (100k loans by default) keeps run-time reasonable on a laptop; use `--sample-size 0` for all data.
 - Strategy return is the *equal-weighted mean* NAR of selected loans (each loan assumed to receive the same $ amount).
-- Limitations: random (not time-based) split; threshold tuned on training data; no macro-economic features.
+- Limitations: random (not time-based) split; no macro-economic features; historical evaluation rather than a live investment backtest.
   See "Future work" in the report (test on 2016-2018 loans, add declined loans, NLP on loan descriptions).
 
 ## References
